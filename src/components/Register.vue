@@ -63,31 +63,31 @@ const count = ref(0);
 
 <style lang="sass" scoped>
 .page
-    background-color: #D9D9D9
-    height: 100vh
+  background-color: #D9D9D9
+  height: 100vh
 .logininput
-    padding: 10px
-    color: #F76F72 !important
+  padding: 10px
+  color: #F76F72 !important
 .loginbtn
-    width: 100%
-    height: 3em
-    color: #000000!important
-    background-color: #F76F72
-    font-family: 'Anek Malayalam', sans-serif
+  width: 100%
+  height: 3em
+  color: #000000!important
+  background-color: #F76F72
+  font-family: 'Anek Malayalam', sans-serif
 .loginlogo
-    margin-bottom: 50px
+  margin-bottom: 50px
 .logotext
-    color: #F76F72
-    font-family: 'Anek Malayalam', sans-serif
+  color: #F76F72
+  font-family: 'Anek Malayalam', sans-serif
 .logotext h4::after
-    content: ""
-    width: 10px
-    height: 2px
-    background: #F76F72
-    display: inline-block
-    animation: cursor-blink 1.2s steps(2) infinite
+  content: ""
+  width: 10px
+  height: 2px
+  background: #F76F72
+  display: inline-block
+  animation: cursor-blink 1.2s steps(2) infinite
 
 @keyframes cursor-blink
-    0%
-        opacity: 0
+  0%
+    opacity: 0
 </style>
