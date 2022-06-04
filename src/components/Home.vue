@@ -1,9 +1,6 @@
 <script setup>
 import { ref } from "vue";
 
-const lorem = ref(
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-);
 const projects = ref([
   { title: "Lol", description: "Lollergoggles" },
   { title: "AGagg", description: "jgkgkgkgkgk" },
@@ -23,7 +20,7 @@ const projects = ref([
 ]);
 </script>
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-md page">
     <div class="row">
       <div class="col-md-2"></div>
       <div class="col-md-8">
@@ -35,11 +32,11 @@ const projects = ref([
             class="col-md-3 col-xs-6"
           >
             <q-card class="projectcard text-white">
-              <q-card-section>
+              <q-card-section style="background-color: #fbb7b8 !important">
                 <div class="text-h6">{{ project.title }}</div>
               </q-card-section>
 
-              <q-card-section>
+              <q-card-section style="background-color: #fbb7b8 !important">
                 {{ project.description }}
               </q-card-section>
 
@@ -47,6 +44,7 @@ const projects = ref([
 
               <q-card-actions>
                 <q-btn flat>Open</q-btn>
+                <q-space></q-space>
                 <q-btn flat>Delete</q-btn>
               </q-card-actions>
             </q-card>
@@ -58,9 +56,12 @@ const projects = ref([
   </div>
 </template>
 <style lang="sass" scoped>
+.page
+    background-color: #D9D9D9
 .projectcard
     background-color: #F76F72
     margin: 10px
+    color: black!important
     &:hover
         color: yellow
 </style>
