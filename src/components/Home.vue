@@ -32,11 +32,8 @@ const hoveringDescription = ref(false);
                 <h4>projects</h4>
               </div>
               <div class="row items-center justify-center">
-                <div class="col-3" style="margin-top: 4px">
-                  {{ projects.length }} projects
-                </div>
+                <div class="col-6">{{ projects.length }} projects</div>
 
-                <div class="col-3"></div>
                 <div class="col-6">
                   <q-btn class="toolbarAdd" flat icon="add">add project</q-btn>
                 </div>
