@@ -43,15 +43,21 @@ const count = ref(0);
             />
           </div>
           <div class="logininput">
-            <q-btn class="loginbtn" color="#F76F72" label="Create account" />
+            <q-btn
+              class="registerbtn"
+              color="#F76F72"
+              label="Create account"
+              style="letter-spacing: 2px"
+            />
           </div>
           <div class="logininput">
             <q-btn
               to="/"
               outline
-              class="loginbtn"
-              color="white"
+              class="registerbtn"
+              color="black"
               label="Sign in"
+              style="letter-spacing: 2px"
             />
           </div>
         </div>
@@ -68,10 +74,10 @@ const count = ref(0);
 .logininput
   padding: 10px
   color: #F76F72 !important
-.loginbtn
+.registerbtn
   width: 100%
   height: 3em
-  color: #000000!important
+  color: #FFFFFF
   background-color: #F76F72
   font-family: 'Anek Malayalam', sans-serif
 .loginlogo

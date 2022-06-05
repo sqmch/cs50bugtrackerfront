@@ -41,6 +41,7 @@ const title = ref("");
 
                 <div class="col-6">
                   <q-btn
+                    style="letter-spacing: 1px"
                     class="toolbarAdd"
                     flat
                     :icon="addButtonIcon ? 'add' : 'arrow_upward'"
@@ -54,12 +55,15 @@ const title = ref("");
               </div>
               <q-separator spaced></q-separator>
               <!--PROJECT GRID-->
+
               <div class="row">
                 <div class="col-6"></div>
                 <div class="col-md-6 col-xs-12">
+                  <!--ADD PROJECT DRAWER-->
+
                   <q-slide-transition>
                     <div v-show="visible">
-                      <div class="logininput">
+                      <div class="addprojectinput">
                         <q-input
                           color="black"
                           v-model="title"
@@ -68,10 +72,10 @@ const title = ref("");
                           hint="Project title"
                         />
                       </div>
-                      <div class="logininput">
+                      <div class="addprojectinput">
                         <q-btn
                           to="/register"
-                          class="loginbtn"
+                          class="addprojectbtn"
                           label="Add project"
                         />
                       </div>
@@ -85,9 +89,10 @@ const title = ref("");
                 >
                   <q-card class="projectcard text-white">
                     <q-card-section
+                      transition-show="jump-down"
                       style="background-color: #fbb7b8 !important"
                     >
-                      <div class="text-h6">{{ project.title }}</div>
+                      <div class="projectTitle">{{ project.title }}</div>
                     </q-card-section>
 
                     <q-card-actions>
@@ -103,6 +108,10 @@ const title = ref("");
                   </q-card>
                 </div>
               </div>
+              <!--FLOATING ACTION BUTTONS-->
+              <q-page-sticky position="bottom-left" :offset="[18, 18]">
+                <q-btn to="/" fab icon="logout" class="addfab" />
+              </q-page-sticky>
               <q-page-sticky position="bottom-right" :offset="[18, 18]">
                 <q-btn
                   fab
@@ -132,10 +141,12 @@ const title = ref("");
   &:hover
     transform: scale(1.1)
 .addfab
-  background-color: white
+  background-color: #F76F72
+  color: white
   height: 60px
   width: 60px
 .header
+
   color: #F76F72
   font-family: 'Anek Malayalam', sans-serif
 .toolbarAdd
@@ -148,15 +159,19 @@ const title = ref("");
   background: #F76F72
   display: inline-block
   animation: cursor-blink 1.2s steps(2) infinite
-.logininput
+.addprojectinput
   padding: 10px
   color: #F76F72 !important
-.loginbtn
+.addprojectbtn
   width: 100%
   height: 3em
-  color: #000000!important
+  letter-spacing: 1px
+  color: #FFFFFF!important
   background-color: #F76F72
   font-family: 'Anek Malayalam', sans-serif
+.projectTitle
+  font-size: 1.2em
+  letter-spacing: .5px
 @keyframes cursor-blink
   0%
     opacity: 0
