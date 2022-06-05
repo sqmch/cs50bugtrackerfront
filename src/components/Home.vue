@@ -67,7 +67,7 @@ function test() {
 
               <div class="row">
                 <div class="col-6"></div>
-                <div class="col-md-6 col-xs-12">
+                <div class="col-md-12 col-xs-12">
                   <!--ADD PROJECT DRAWER-->
 
                   <q-slide-transition>
@@ -78,7 +78,7 @@ function test() {
                           v-model="title"
                           filled
                           type="text"
-                          hint="Project title"
+                          label="Project title"
                         />
                       </div>
                       <div class="addprojectinput">

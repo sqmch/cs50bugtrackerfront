@@ -45,7 +45,7 @@ let difference = ref([]);
                       visible = !visible;
                       addButtonIcon = !addButtonIcon;
                     "
-                    >add bug</q-btn
+                    >{{ addButtonIcon ? "add bug" : "close" }}</q-btn
                   >
                 </div>
               </div>
@@ -96,7 +96,6 @@ let difference = ref([]);
                             v-model="checked"
                             :val="bug.title"
                             color="white"
-                            class="text-red"
                             @click="test1(bug)"
                           />
                         </div>
