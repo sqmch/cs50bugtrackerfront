@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-
+import router from "../router";
 const projects = ref([
   { title: "wrkout", description: "Lollergoggles" },
   { title: "trvcker", description: "jgkgkgkgkgk" },
@@ -17,11 +17,20 @@ const projects = ref([
   { title: "AGagg", description: "" },
   { title: "srwtwtwt", description: "erteryeruerueru" },
   { title: "aseasese", description: "ssdfjdfjdfdfjjdf" },
+  { title: "wrkout", description: "Lollergoggles" },
+  { title: "trvcker", description: "jgkgkgkgkgk" },
+  { title: "rdb", description: "" },
+  { title: "portfolio project", description: "ssdfjdfjdfdfjjdf" },
+  { title: "treeclassifier", description: "Lollergoggles" },
+  { title: "wschat", description: "jgkgkgkgkgk" },
 ]);
 const hoveringDescription = ref(false);
 const visible = ref(false);
 const addButtonIcon = ref(true);
 const title = ref("");
+function test() {
+  router.push("/bugs");
+}
 </script>
 <template>
   <q-layout class="page">
@@ -34,7 +43,7 @@ const title = ref("");
             <div class="col-md-8">
               <!--HEADER ROW-->
               <div class="row header items-center justify-center">
-                <h4>projects</h4>
+                <h4>projects/</h4>
               </div>
               <div class="row items-center justify-center">
                 <div class="col-6">{{ projects.length }} projects</div>
@@ -73,11 +82,7 @@ const title = ref("");
                         />
                       </div>
                       <div class="addprojectinput">
-                        <q-btn
-                          to="/register"
-                          class="addprojectbtn"
-                          label="Add project"
-                        />
+                        <q-btn class="addprojectbtn" label="Add project" />
                       </div>
                     </div>
                   </q-slide-transition>
@@ -92,7 +97,12 @@ const title = ref("");
                       transition-show="jump-down"
                       style="background-color: #fbb7b8 !important"
                     >
-                      <div class="projectTitle">{{ project.title }}</div>
+                      <div
+                        class="row items-center justify-center"
+                        @click="test"
+                      >
+                        <div class="projectTitle">{{ project.title }}</div>
+                      </div>
                     </q-card-section>
 
                     <q-card-actions>
@@ -170,8 +180,9 @@ const title = ref("");
   background-color: #F76F72
   font-family: 'Anek Malayalam', sans-serif
 .projectTitle
-  font-size: 1.2em
+  font-size: 1.3em
   letter-spacing: .5px
+
 @keyframes cursor-blink
   0%
     opacity: 0

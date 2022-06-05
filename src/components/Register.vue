@@ -11,9 +11,12 @@ const count = ref(0);
     <div class="page row items-center">
       <div class="col-md-4 col-xs-12"></div>
       <div class="col-md-4 col-xs-12">
-        <div class="row items-center justify-center">
-          <div class="logotext"><h4>bugtrvcker</h4></div>
+        <div class="row items-start justify-center">
+          <div class="logotext">
+            <h4>bugtrvcker</h4>
+          </div>
         </div>
+        <div class="row items-center justify-center"></div>
         <div>
           <div class="logininput">
             <q-input
@@ -21,7 +24,7 @@ const count = ref(0);
               v-model="email"
               filled
               type="email"
-              hint="Email"
+              label="Email"
             />
           </div>
           <div class="logininput">
@@ -30,7 +33,7 @@ const count = ref(0);
               v-model="password"
               filled
               type="password"
-              hint="Password"
+              label="Password"
             />
           </div>
           <div class="logininput">
@@ -39,7 +42,7 @@ const count = ref(0);
               v-model="repeatPassword"
               filled
               type="password"
-              hint="Repeat password"
+              label="Repeat password"
             />
           </div>
           <div class="logininput">

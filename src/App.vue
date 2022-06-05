@@ -7,7 +7,7 @@ import Register from "./components/Register.vue";
 
 <template>
   <router-view v-slot="{ Component }">
-    <transition name="fade">
+    <transition name="fade" mode="out-in">
       <component :is="Component" />
     </transition>
   </router-view>
@@ -19,11 +19,12 @@ import Register from "./components/Register.vue";
   font-family: 'Anek Malayalam', sans-serif
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
-  text-align: center
-  color: #2c3e50
+::-webkit-scrollbar
+  display: none
+
 .fade-enter-active,
 .fade-leave-active
-  transition: opacity 0.15s ease
+  transition: opacity 0.1s ease
 
 .fade-enter-from,
 .fade-leave-to
