@@ -4,7 +4,12 @@ const bugsdata = ref([
   { id: 1, title: "fix the front signup store", checked: false },
   { id: 2, title: "assemble the div from components", checked: false },
   { id: 3, title: "registration sometimes fails with 404", checked: false },
-  { id: 4, title: "user bricked pc in shopping cart", checked: false },
+  {
+    id: 4,
+    title:
+      "user bricked pc in shopping cart cked pc in sh cked pc in shcked pc ibricked pc in shopping cart cked pc in sh cked p bricked pc in shopping cart cked pc in sh cked p bricked pc in shopping cart cked pc in sh cked p bricked pc in shopping cart cked pc in sh cked pn sh",
+    checked: false,
+  },
   { id: 5, title: "Do stuff with the other framework", checked: false },
   { id: 6, title: "Integration tests fail", checked: false },
 ]);
@@ -33,7 +38,10 @@ let difference = ref([]);
                 <div><h4>myproject/bugs/</h4></div>
               </div>
               <div class="row items-center justify-center">
-                <div class="col-6">{{ bugs.length - checked.length }} bugs</div>
+                <div class="col-6">
+                  {{ bugs.length - checked.length }}
+                  {{ bugs.length - checked.length === 1 ? "bug" : "bugs" }}
+                </div>
 
                 <div class="col-6">
                   <q-btn
@@ -52,7 +60,7 @@ let difference = ref([]);
               <q-separator spaced></q-separator>
               <!--PROJECT GRID-->
 
-              <div class="row">
+              <div class="row items-center">
                 <div class="col-6"></div>
                 <div class="col-md-12 col-xs-12">
                   <!--ADD PROJECT DRAWER-->
@@ -74,43 +82,51 @@ let difference = ref([]);
                           label="Add bug"
                           style="margin-bottom: 1em"
                         />
+                        <q-separator spaced></q-separator>
                       </div>
                     </div>
                   </q-slide-transition>
                 </div>
                 <!--BUG DATA LOOP-->
+
                 <div
                   v-for="bug in bugs"
                   v-bind:key="bug"
-                  class="col-md-12 col-xs-12"
+                  class="col-md-12 col-xs-12 cardParent"
                 >
-                  <q-card
-                    v-if="!checked.includes(bug.title)"
-                    class="projectcard"
-                  >
-                    <q-card-actions>
-                      <div class="row">
-                        <div class="bugCheckbox col">
-                          <q-checkbox
-                            size="xl"
-                            v-model="checked"
-                            :val="bug.title"
-                            color="white"
-                            @click="test1(bug)"
-                          />
+                  <q-slide-transition appear="true" :duration="1000">
+                    <q-card
+                      v-if="!checked.includes(bug.title)"
+                      class="projectcard"
+                    >
+                      <q-card-section>
+                        <q-skeleton v-if="false" :animation="wave" />
+                        <div class="row items-center">
+                          <div class="bugCheckbox col-1">
+                            <div class="row justify-center">
+                              <q-checkbox
+                                size="md"
+                                v-model="checked"
+                                :val="bug.title"
+                                color="white"
+                              />
+                            </div>
+                          </div>
+                          <q-separator inset vertical spaced></q-separator>
+                          <div class="projectTitle col-9">
+                            {{ bug.title }}
+                          </div>
+                          <q-space></q-space>
+                          <div class="col-1">
+                            <q-btn size="md" flat color="white" icon="delete"
+                              ><q-tooltip> Delete bug </q-tooltip></q-btn
+                            >
+                          </div>
                         </div>
-                        <q-separator spaced vertical inset></q-separator>
-                        <div class="q-pa-md projectTitle">{{ bug.title }}</div>
-                      </div>
-                      <q-space></q-space>
-
-                      <q-btn flat color="white" icon="delete"
-                        ><q-tooltip> Delete bug </q-tooltip></q-btn
-                      >
-                    </q-card-actions>
-                  </q-card>
+                      </q-card-section>
+                    </q-card></q-slide-transition
+                  >
                 </div>
-
                 <div class="qa-pa-md col-12">
                   <div class="row" style="margin-top: 3em">
                     <div class="col">{{ checked.length }} fixed</div>
@@ -118,35 +134,42 @@ let difference = ref([]);
                   <div class="col"><q-separator spaced></q-separator></div>
                 </div>
                 <div
-                  v-for="check in checked"
-                  v-bind:key="check"
-                  class="col-md-12 col-xs-12 checkedList"
+                  v-for="bug in bugs"
+                  v-bind:key="bug"
+                  class="col-md-12 col-xs-12"
                 >
-                  <q-card class="projectcard">
-                    <q-card-actions>
-                      <div class="row items-center justify-center">
-                        <div class="bugCheckbox">
-                          <q-checkbox
-                            size="xl"
-                            v-model="checked"
-                            :val="check"
-                            color="white"
-                            class="text-red"
-                          />
+                  <q-slide-transition appear="true" :duration="1000">
+                    <q-card
+                      class="projectcard"
+                      v-if="checked.includes(bug.title)"
+                    >
+                      <q-card-section>
+                        <q-skeleton v-if="false" :animation="wave" />
+                        <div class="row items-center">
+                          <div class="bugCheckbox col-1">
+                            <div class="row justify-center">
+                              <q-checkbox
+                                size="md"
+                                v-model="checked"
+                                :val="bug.title"
+                                color="black"
+                              />
+                            </div>
+                          </div>
+                          <q-separator inset vertical spaced></q-separator>
+                          <div class="projectTitle col-9 checkedList">
+                            {{ bug.title }}
+                          </div>
+                          <q-space></q-space>
+                          <div class="col-1">
+                            <q-btn size="md" flat color="white" icon="delete"
+                              ><q-tooltip> Delete bug </q-tooltip></q-btn
+                            >
+                          </div>
                         </div>
-
-                        <q-separator vertical inset></q-separator>
-                        <div class="q-pa-md projectTitle">
-                          {{ check }}
-                        </div>
-                      </div>
-                      <q-space></q-space>
-
-                      <q-btn flat color="white" icon="delete"
-                        ><q-tooltip> Delete bug </q-tooltip></q-btn
-                      >
-                    </q-card-actions>
-                  </q-card>
+                      </q-card-section>
+                    </q-card></q-slide-transition
+                  >
                 </div>
               </div>
               <!--FLOATING ACTION BUTTONS-->
@@ -177,10 +200,10 @@ let difference = ref([]);
     height: 100%
 
 .projectcard
-    cursor: pointer
-    background-color: #f99a9c
-    margin: 10px
+    background-color: #DE6366//#8d8d8d//#f99a9c
+    margin: 5px
     transition: all .2s ease-in-out
+
     &:hover
         transform: scale(1.03)
         background-color: #F76F72
@@ -212,10 +235,10 @@ let difference = ref([]);
     height: 3em
     letter-spacing: 1px
     color: #FFFFFF!important
-    background-color: #F76F72
+    background-color: #676767
     font-family: 'Anek Malayalam', sans-serif
 .projectTitle
-    font-size: 1.1em
+    font-size: 14px
     letter-spacing: .5px
     color: white
 .checkedList

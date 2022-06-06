@@ -13,7 +13,10 @@ const count = ref(0);
     <div class="page row items-center">
       <div class="col-md-4 col-xs-12"></div>
       <div class="col-md-4 col-xs-12">
-        <div class="row items-start justify-center">
+        <div
+          class="row items-start justify-center absolute-top"
+          style="margin-top: 10vh"
+        >
           <div class="logotext">
             <h4>bugtrvcker</h4>
           </div>

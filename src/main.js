@@ -8,10 +8,10 @@ import "@quasar/extras/material-icons/material-icons.css";
 // Import Quasar css
 import "quasar/src/css/index.sass";
 
-// Assumes your root component is App.vue
-// and placed in same folder as main.js
 import router from "./router/index.js";
 import { createRouter, createWebHistory } from 'vue-router'
+import { createPinia } from 'pinia'
+
 import App from "./App.vue";
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
@@ -29,7 +29,7 @@ const myApp = createApp(App);
 
 myApp.use(Quasar, {
 	plugins: {}, // import Quasar plugins and add here
-}).use(router);
+}).use(router).use(createPinia());
 
 // Assumes you have a <div id="app"></div> in your index.html
 myApp.mount("#app");
