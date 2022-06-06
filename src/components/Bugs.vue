@@ -94,7 +94,7 @@ let difference = ref([]);
                   v-bind:key="bug"
                   class="col-md-12 col-xs-12 cardParent"
                 >
-                  <q-slide-transition appear="true" :duration="1000">
+                  <q-slide-transition appear :duration="1000">
                     <q-card
                       v-if="!checked.includes(bug.title)"
                       class="projectcard"
@@ -105,11 +105,8 @@ let difference = ref([]);
                           <div class="bugCheckbox col-1">
                             <div class="row justify-center">
                               <q-checkbox
+                                class="cbox"
                                 dark
-                                @click="
-                                  checkABox();
-                                  toggleBox();
-                                "
                                 size="md"
                                 v-model="checked"
                                 :val="bug.title"
@@ -143,10 +140,11 @@ let difference = ref([]);
                   v-bind:key="bug"
                   class="col-md-12 col-xs-12"
                 >
-                  <q-slide-transition appear="true" :duration="1000">
+                  <q-slide-transition appear :duration="1000">
                     <q-card
                       class="projectcard"
                       v-if="checked.includes(bug.title)"
+                      style="background-color: #676767 !important"
                     >
                       <q-card-section>
                         <q-skeleton v-if="false" :animation="wave" />
@@ -159,6 +157,7 @@ let difference = ref([]);
                                 v-model="checked"
                                 :val="bug.title"
                                 color="black"
+                                class="cbox"
                               />
                             </div>
                           </div>
@@ -252,4 +251,7 @@ let difference = ref([]);
 @keyframes cursor-blink
     0%
         opacity: 0
+.cbox:hover
+    transition: all .2s ease-in-out
+    transform: scale(1.2)
 </style>
