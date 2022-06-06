@@ -8,21 +8,6 @@ const projects = ref([
   { title: "portfolio project", description: "ssdfjdfjdfdfjjdf" },
   { title: "treeclassifier", description: "Lollergoggles" },
   { title: "wschat", description: "jgkgkgkgkgk" },
-  { title: "srwtwtwt", description: "erteryeruerueru" },
-  { title: "aseasese", description: "" },
-  { title: "Lol", description: "" },
-  { title: "AGagg", description: "jgkgkgkgkgk" },
-  { title: "srwtwtwt", description: "erteryeruerueru" },
-  { title: "aseasese", description: "ssdfjdfjdfdfjjdf" },
-  { title: "AGagg", description: "" },
-  { title: "srwtwtwt", description: "erteryeruerueru" },
-  { title: "aseasese", description: "ssdfjdfjdfdfjjdf" },
-  { title: "wrkout", description: "Lollergoggles" },
-  { title: "trvcker", description: "jgkgkgkgkgk" },
-  { title: "rdb", description: "" },
-  { title: "portfolio project", description: "ssdfjdfjdfdfjjdf" },
-  { title: "treeclassifier", description: "Lollergoggles" },
-  { title: "wschat", description: "jgkgkgkgkgk" },
 ]);
 const hoveringDescription = ref(false);
 const visible = ref(false);
@@ -151,7 +136,7 @@ function test() {
   transition: all .1s ease-in-out
   &:hover
     transform: scale(1.1)
-    background-color: #F99A9C
+    background-color: #F76F72
 .addfab
   background-color: #F76F72
   color: white
@@ -179,7 +164,7 @@ function test() {
   height: 3em
   letter-spacing: 1px
   color: #FFFFFF!important
-  background-color: #F76F72
+  background-color: #676767
   font-family: 'Anek Malayalam', sans-serif
 .projectTitle
   font-size: 1.3em
