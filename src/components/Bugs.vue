@@ -205,12 +205,11 @@ let difference = ref([]);
     height: 100%
 
 .projectcard
+    transform: scale(0.95)
     background-color: #DE6366//#8d8d8d//#f99a9c
-    margin: 5px
     transition: all .2s ease-in-out
-
     &:hover
-        transform: scale(1.03)
+        transform: scale(1.02)
         background-color: #F76F72
 
 .addfab
@@ -243,7 +242,7 @@ let difference = ref([]);
     background-color: #676767
     font-family: 'Anek Malayalam', sans-serif
 .projectTitle
-    font-size: 14px
+    font-size: 16px
     letter-spacing: .5px
     color: white
 .checkedList
@@ -253,5 +252,5 @@ let difference = ref([]);
         opacity: 0
 .cbox:hover
     transition: all .2s ease-in-out
-    transform: scale(1.2)
+    transform: scale(1.3)
 </style>
