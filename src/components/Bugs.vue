@@ -105,6 +105,7 @@ let difference = ref([]);
                           <div class="bugCheckbox col-1">
                             <div class="row justify-center">
                               <q-checkbox
+                                dark
                                 @click="
                                   checkABox();
                                   toggleBox();
@@ -112,7 +113,7 @@ let difference = ref([]);
                                 size="md"
                                 v-model="checked"
                                 :val="bug.title"
-                                color="black"
+                                color="white"
                               />
                             </div>
                           </div>
