@@ -1,21 +1,37 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import router from "../router";
-const projects = ref([
-  { title: "wrkout", description: "Lollergoggles" },
-  { title: "trvcker", description: "jgkgkgkgkgk" },
-  { title: "rdb", description: "" },
-  { title: "portfolio project", description: "ssdfjdfjdfdfjjdf" },
-  { title: "treeclassifier", description: "Lollergoggles" },
-  { title: "wschat", description: "jgkgkgkgkgk" },
-]);
+import { useAuthStore, useGeneralStore } from "../store";
+
 const hoveringDescription = ref(false);
 const visible = ref(false);
 const addButtonIcon = ref(true);
 const title = ref("");
-function test() {
-  router.push("/bugs");
+const generalStore = useGeneralStore();
+const authStore = useAuthStore();
+import { useQuasar } from "quasar";
+
+let loading = ref(false);
+
+const $q = useQuasar();
+const loginForm = ref(null);
+let titleRules = ref([
+  (val) => (val !== null && val !== "") || "Please enter a title",
+  (val) => val.length >= 3 || "Title must contain at least 3 characters",
+  (val) =>
+    val.match(/^[0-9a-zA-Z]+$/) || "Special characters not allowed in title",
+]);
+function onSubmit() {
+  loginForm.value.validate();
+  createProject();
 }
+function createProject() {
+  generalStore.createProject();
+  generalStore.createProjectTitle = "";
+}
+onMounted(() => {
+  generalStore.getProjects();
+});
 </script>
 <template>
   <q-layout class="page">
@@ -31,7 +47,9 @@ function test() {
                 <h4>projects/</h4>
               </div>
               <div class="row items-center justify-center">
-                <div class="col-6">{{ projects.length }} projects</div>
+                <div class="col-6">
+                  {{ generalStore.projects.length }} projects
+                </div>
 
                 <div class="col-6">
                   <q-btn
@@ -57,32 +75,40 @@ function test() {
 
                   <q-slide-transition>
                     <div v-show="visible">
-                      <div class="addprojectinput">
-                        <q-input
-                          color="black"
-                          v-model="title"
-                          filled
-                          type="text"
-                          label="Project title"
-                        />
-                      </div>
-                      <div class="addprojectinput">
-                        <q-btn
-                          class="addprojectbtn"
-                          label="Add project"
-                          style="margin-bottom: 1em"
-                        /><q-separator spaced></q-separator>
-                      </div>
+                      <q-form
+                        ref="loginForm"
+                        @submit.prevent.stop="onSubmit"
+                        class="q-gutter-md q-validation-component"
+                      >
+                        <div class="addprojectinput">
+                          <q-input
+                            color="black"
+                            v-model="generalStore.createProjectTitle"
+                            filled
+                            type="text"
+                            label="Project title"
+                            :rules="titleRules"
+                          />
+                        </div>
+                        <div class="addprojectinput">
+                          <q-btn
+                            type="submit"
+                            class="addprojectbtn"
+                            label="Add project"
+                            style="margin-bottom: 1em"
+                          /><q-separator spaced></q-separator>
+                        </div>
+                      </q-form>
                     </div>
                   </q-slide-transition>
                 </div>
                 <div
-                  v-for="project in projects"
+                  v-for="project in generalStore.projects"
                   v-bind:key="project"
                   class="col-md-3 col-xs-6"
                 >
                   <q-card class="projectcard text-white">
-                    <q-card-section @click="test" transition-show="jump-down">
+                    <q-card-section transition-show="jump-down">
                       <div class="row items-center justify-center">
                         <div class="projectTitle">{{ project.title }}</div>
                       </div>

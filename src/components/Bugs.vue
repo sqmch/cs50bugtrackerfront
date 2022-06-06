@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 const bugsdata = ref([
   { id: 1, title: "fix the front signup store", checked: false },
   { id: 2, title: "assemble the div from components", checked: false },
@@ -252,5 +252,5 @@ let difference = ref([]);
         opacity: 0
 .cbox:hover
     transition: all .2s ease-in-out
-    transform: scale(1.3)
+    transform: scale(1.2)
 </style>

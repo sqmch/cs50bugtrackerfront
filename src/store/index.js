@@ -33,7 +33,7 @@ export const useGeneralStore = defineStore('general', {
             createBugTitle: "",
             currentBugTitle: "",
             editedBugID: null,
-            editedProjectID: null
+            editedProjectID: null,
         }
     },
     getters: {},
@@ -64,10 +64,10 @@ export const useGeneralStore = defineStore('general', {
                         headers: { Authorization: 'Bearer ' + authStore.token },
                     }
                 )
-                .then( (response) => {
+                .then((response) => {
+                    console.log("createProject ran succesfully")
                     this.getProjects()
                     this.createProjectTitle = ''
-                    this.createdRoutineID = response.data.id
                 })
         },
         editProject(project_id) {
