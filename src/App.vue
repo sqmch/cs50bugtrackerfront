@@ -9,7 +9,7 @@ const q = useQuasar();
 
 <template>
   <router-view v-slot="{ Component }">
-    <transition name="fade" mode="out-in">
+    <transition name="slide-fade">
       <component :is="Component" />
     </transition>
   </router-view>
@@ -21,14 +21,16 @@ const q = useQuasar();
   font-family: 'Anek Malayalam', sans-serif
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
+  background-color: #D9D9D9
 ::-webkit-scrollbar
   display: none
+.slide-fade-enter-active
+  transition: all .4s ease-in
 
-.fade-enter-active,
-.fade-leave-active
-  transition: opacity 0.2s ease
+.slide-fade-leave-active
+  transition: all .3s cubic-bezier(.6, .9, .2,.9)
 
-.fade-enter-from,
-.fade-leave-to
-  opacity: 0
+.slide-fade-enter-from,
+.slide-fade-leave-to
+  transform: translateX(-1500px)
 </style>

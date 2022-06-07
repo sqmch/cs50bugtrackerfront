@@ -8,7 +8,7 @@ export const useAuthStore = defineStore('auth', {
         return {
             token: useStorage('token', null),
             user: null,
-            user_id: null,
+            user_id: useStorage('user_id', null),
         }
     },
     actions: {
@@ -30,10 +30,14 @@ export const useGeneralStore = defineStore('general', {
             projects: [],
             bugs: [],
             createProjectTitle: "",
+            editProjectTitle: "",
             createBugTitle: "",
             currentBugTitle: "",
             editedBugID: null,
             editedProjectID: null,
+            deleteID: null,
+            currentProject: null,
+            currentProjectTitle: ""
         }
     },
     getters: {},
@@ -65,7 +69,6 @@ export const useGeneralStore = defineStore('general', {
                     }
                 )
                 .then((response) => {
-                    console.log("createProject ran succesfully")
                     this.getProjects()
                     this.createProjectTitle = ''
                 })
@@ -77,7 +80,7 @@ export const useGeneralStore = defineStore('general', {
                     `users/${authStore.user_id}/projects/${project_id}`,
                     {
                         user_id: authStore.user_id,
-                        title: this.createProjectTitle,
+                        title: this.editProjectTitle,
                     },
                     {
                         headers: { Authorization: 'Bearer ' + authStore.token },

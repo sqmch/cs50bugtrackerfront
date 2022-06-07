@@ -2,32 +2,56 @@
 import { ref, onMounted } from "vue";
 import router from "../router";
 import { useAuthStore, useGeneralStore } from "../store";
-
-const hoveringDescription = ref(false);
-const visible = ref(false);
-const addButtonIcon = ref(true);
-const title = ref("");
-const generalStore = useGeneralStore();
-const authStore = useAuthStore();
 import { useQuasar } from "quasar";
 
-let loading = ref(false);
-
 const $q = useQuasar();
+const generalStore = useGeneralStore();
+const authStore = useAuthStore();
+
+let visible = ref(false);
+let editVisible = ref(false);
+const addButtonIcon = ref(true);
+let title = ref("");
+const hoveringDescription = ref(false);
+let loading = ref(false);
+let confirmDelete = ref(false);
 const loginForm = ref(null);
+const editForm = ref(null);
+
 let titleRules = ref([
   (val) => (val !== null && val !== "") || "Please enter a title",
   (val) => val.length >= 3 || "Title must contain at least 3 characters",
-  (val) =>
-    val.match(/^[0-9a-zA-Z]+$/) || "Special characters not allowed in title",
 ]);
+
 function onSubmit() {
   loginForm.value.validate();
-  createProject();
-}
-function createProject() {
   generalStore.createProject();
   generalStore.createProjectTitle = "";
+}
+function editSubmit() {
+  editForm.value.validate();
+  generalStore.editProject(generalStore.currentProject.id);
+  generalStore.editProjectTitle = "";
+  generalStore.createProjectTitle = "";
+}
+function confirmDeleteProject(project) {
+  confirmDelete.value = true;
+  generalStore.deleteID = project.id;
+}
+function deleteProject() {
+  generalStore.deleteProject(generalStore.deleteID);
+}
+function editEvent(project) {
+  generalStore.currentProject = project;
+  generalStore.createProjectTitle = project.title;
+  generalStore.editProjectTitle = project.title;
+
+  if (editVisible.value === true) {
+    visible.value = false;
+  } else {
+    editVisible.value = !editVisible.value;
+    visible.value = false;
+  }
 }
 onMounted(() => {
   generalStore.getProjects();
@@ -35,13 +59,33 @@ onMounted(() => {
 </script>
 <template>
   <q-layout class="page">
+    <q-dialog v-model="confirmDelete" persistent>
+      <q-card>
+        <q-card-section class="row items-center justify-center">
+          <q-icon name="warning" size="xl"></q-icon>
+        </q-card-section>
+        <q-card-section
+          >Are you sure you want to delete this project?</q-card-section
+        >
+
+        <q-card-actions align="right">
+          <q-btn flat label="Cancel" color="" v-close-popup />
+          <q-btn
+            @click="deleteProject"
+            label="Delete"
+            color="red"
+            v-close-popup
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
     <q-page-container>
       <q-page>
         <div class="q-pa-md">
           <div class="row">
-            <div class="col-md-2"></div>
+            <div class="col-md-2 col-xs-1"></div>
             <!--MAIN COLUMN-->
-            <div class="col-md-8">
+            <div class="col-md-8 col-xs-10">
               <!--HEADER ROW-->
               <div class="row header items-center justify-center">
                 <h4>projects/</h4>
@@ -59,7 +103,9 @@ onMounted(() => {
                     :icon="addButtonIcon ? 'add' : 'arrow_upward'"
                     @click="
                       visible = !visible;
+                      editVisible = false;
                       addButtonIcon = !addButtonIcon;
+                      generalStore.createProjectTitle = '';
                     "
                     >add project</q-btn
                   >
@@ -69,7 +115,7 @@ onMounted(() => {
               <!--PROJECT GRID-->
 
               <div class="row">
-                <div class="col-6"></div>
+                <div class="col-md-6"></div>
                 <div class="col-md-12 col-xs-12">
                   <!--ADD PROJECT DRAWER-->
 
@@ -78,7 +124,7 @@ onMounted(() => {
                       <q-form
                         ref="loginForm"
                         @submit.prevent.stop="onSubmit"
-                        class="q-gutter-md q-validation-component"
+                        class="q-validation-component"
                       >
                         <div class="addprojectinput">
                           <q-input
@@ -92,6 +138,7 @@ onMounted(() => {
                         </div>
                         <div class="addprojectinput">
                           <q-btn
+                            @click="visible = !visible"
                             type="submit"
                             class="addprojectbtn"
                             label="Add project"
@@ -101,32 +148,80 @@ onMounted(() => {
                       </q-form>
                     </div>
                   </q-slide-transition>
-                </div>
-                <div
-                  v-for="project in generalStore.projects"
-                  v-bind:key="project"
-                  class="col-md-3 col-xs-6"
-                >
-                  <q-card class="projectcard text-white">
-                    <q-card-section transition-show="jump-down">
-                      <div class="row items-center justify-center">
-                        <div class="projectTitle">{{ project.title }}</div>
-                      </div>
-                    </q-card-section>
-
-                    <q-card-actions>
-                      <q-btn icon="open_in_new" flat color="white">
-                        <q-tooltip> Open project </q-tooltip></q-btn
+                  <q-slide-transition>
+                    <div v-show="editVisible">
+                      <q-form
+                        ref="editForm"
+                        @submit.prevent.stop="editSubmit"
+                        class="q-validation-component"
                       >
-                      <q-space></q-space>
+                        <div class="addprojectinput">
+                          <div class="text-h6" style="margin-bottom: 20px">
+                            [ EDIT ] >> {{ generalStore.createProjectTitle }}
+                          </div>
+                          <q-input
+                            color="black"
+                            v-model="generalStore.editProjectTitle"
+                            filled
+                            type="text"
+                            label="New title"
+                            :rules="titleRules"
+                          />
+                        </div>
+                        <div class="addprojectinput">
+                          <q-btn
+                            @click="editVisible = !editVisible"
+                            type="submit"
+                            class="addprojectbtn"
+                            label="Edit title"
+                            style="margin-bottom: 1em"
+                          />
 
-                      <q-btn flat color="white" icon="delete"
-                        ><q-tooltip> Delete project </q-tooltip></q-btn
-                      >
-                    </q-card-actions>
-                  </q-card>
+                          <q-btn
+                            @click="editVisible = !editVisible"
+                            flat
+                            class="addprojectbtn"
+                            label="Close"
+                            style="margin-bottom: 1em"
+                          /><q-separator spaced></q-separator>
+                        </div>
+                      </q-form>
+                    </div>
+                  </q-slide-transition>
                 </div>
+                <transition-group name="list">
+                  <div
+                    v-for="project in generalStore.projects"
+                    v-bind:key="project.id"
+                    class="col-md-3 col-xs-6"
+                  >
+                    <q-card class="projectcard text-white">
+                      <q-card-section transition-show="jump-down">
+                        <div class="row items-center justify-center">
+                          <div class="projectTitle">{{ project.title }}</div>
+                        </div>
+                      </q-card-section>
+
+                      <q-card-actions>
+                        <q-btn
+                          flat
+                          color="white"
+                          icon="edit"
+                          @click="editEvent(project)"
+                        ></q-btn>
+                        <q-space></q-space>
+                        <q-btn
+                          flat
+                          color="white"
+                          icon="delete"
+                          @click="confirmDeleteProject(project)"
+                        ></q-btn>
+                      </q-card-actions>
+                    </q-card>
+                  </div>
+                </transition-group>
               </div>
+
               <!--FLOATING ACTION BUTTONS-->
               <q-page-sticky position="bottom-left" :offset="[18, 18]">
                 <q-btn to="/" fab icon="logout" class="addfab"
@@ -142,11 +237,13 @@ onMounted(() => {
                     visible = !visible;
                     addButtonIcon = !addButtonIcon;
                   "
+                  visible="!visible;"
+                  addButtonIcon="!addButtonIcon;"
                   ><q-tooltip> Add project </q-tooltip></q-btn
                 >
               </q-page-sticky>
             </div>
-            <div class="col-md-2"></div>
+            <div class="col-md-2 col-xs-1"></div>
           </div></div></q-page></q-page-container
   ></q-layout>
 </template>
@@ -169,7 +266,6 @@ onMounted(() => {
   height: 60px
   width: 60px
 .header
-
   color: #F76F72
   font-family: 'Anek Malayalam', sans-serif
 .toolbarAdd
@@ -187,7 +283,6 @@ onMounted(() => {
   color: #F76F72 !important
 .addprojectbtn
   width: 100%
-  height: 3em
   letter-spacing: 1px
   color: #FFFFFF!important
   background-color: #676767
@@ -199,4 +294,13 @@ onMounted(() => {
 @keyframes cursor-blink
   0%
     opacity: 0
+
+.list-enter-active,
+.list-leave-active
+  transition: all 0.5s ease
+
+.list-enter-from,
+.list-leave-to
+  opacity: 0
+  transform: translateX(30px)
 </style>

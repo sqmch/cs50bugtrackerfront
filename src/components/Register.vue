@@ -94,6 +94,7 @@ function createAccount() {
                 type="username"
                 label="username"
                 :rules="usernameRules"
+                autocomplete="on"
               />
             </div>
             <div class="logininput">
@@ -104,6 +105,7 @@ function createAccount() {
                 type="password"
                 label="Password"
                 :rules="passwordRules"
+                autocomplete="current-password"
               />
             </div>
             <div class="logininput">
@@ -114,6 +116,7 @@ function createAccount() {
                 type="password"
                 label="Repeat password"
                 :rules="passwordRules"
+                autocomplete="off"
               />
             </div>
             <div class="logininput">

@@ -59,69 +59,74 @@ function login() {
 </script>
 
 <template>
-  <div class="q-md">
-    <div class="page row items-center">
-      <div class="col-md-4 col-xs-12"></div>
-      <div class="col-md-4 col-xs-12">
-        <div
-          class="row items-start justify-center absolute-top"
-          style="margin-top: 10vh"
-        >
-          <div class="logotext">
-            <h4>bugtrvcker</h4>
-          </div>
-        </div>
-        <div class="row items-center justify-center"></div>
-        <div>
-          <q-form
-            ref="loginForm"
-            @submit.prevent.stop="onSubmit"
-            class="q-gutter-md q-validation-component"
-          >
-            <div class="logininput">
-              <q-input
-                color="black"
-                v-model="username"
-                filled
-                type="text"
-                label="Username"
-                :rules="usernameRules"
-              />
+  <q-layout class="page">
+    <q-page-container>
+      <q-page>
+        <div class="q-md">
+          <div class="page row items-center">
+            <div class="col-md-4 col-xs-12"></div>
+            <div class="col-md-4 col-xs-12">
+              <div
+                class="row items-start justify-center absolute-top"
+                style="margin-top: 10vh"
+              >
+                <div class="logotext">
+                  <h4>bugtrvcker</h4>
+                </div>
+              </div>
+              <div class="row items-center justify-center"></div>
+              <div>
+                <q-form
+                  ref="loginForm"
+                  @submit.prevent.stop="onSubmit"
+                  class="q-gutter-md q-validation-component"
+                >
+                  <div class="logininput">
+                    <q-input
+                      color="black"
+                      v-model="username"
+                      filled
+                      type="text"
+                      label="Username"
+                      :rules="usernameRules"
+                      autocomplete="on"
+                    />
+                  </div>
+                  <div class="logininput">
+                    <q-input
+                      color="black"
+                      v-model="password"
+                      filled
+                      type="password"
+                      label="Password"
+                      :rules="passwordRules"
+                      autocomplete="current-password"
+                    />
+                  </div>
+                  <div class="logininput">
+                    <q-btn
+                      :loading="loading"
+                      type="submit"
+                      class="loginbtn"
+                      label="Sign in"
+                      style="letter-spacing: 2px"
+                    />
+                  </div>
+                  <div class="logininput">
+                    <q-btn
+                      to="/register"
+                      outline
+                      class="loginbtn"
+                      color="black"
+                      label="Create account"
+                      style="letter-spacing: 2px"
+                    /></div
+                ></q-form>
+              </div>
             </div>
-            <div class="logininput">
-              <q-input
-                color="black"
-                v-model="password"
-                filled
-                type="password"
-                label="Password"
-                :rules="passwordRules"
-              />
-            </div>
-            <div class="logininput">
-              <q-btn
-                :loading="loading"
-                type="submit"
-                class="loginbtn"
-                label="Sign in"
-                style="letter-spacing: 2px"
-              />
-            </div>
-            <div class="logininput">
-              <q-btn
-                to="/register"
-                outline
-                class="loginbtn"
-                color="black"
-                label="Create account"
-                style="letter-spacing: 2px"
-              /></div
-          ></q-form>
-        </div>
-      </div>
-      <div class="col-md-4 col-xs-12"></div>
-    </div>
-  </div>
+            <div class="col-md-4 col-xs-12"></div>
+          </div></div></q-page></q-page-container
+  ></q-layout>
 </template>
 
 <style lang="sass" scoped>
