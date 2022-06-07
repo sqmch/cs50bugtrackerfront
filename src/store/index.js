@@ -30,14 +30,17 @@ export const useGeneralStore = defineStore('general', {
             projects: [],
             bugs: [],
             createProjectTitle: "",
-            editProjectTitle: "",
             createBugTitle: "",
+            editProjectTitle: "",
+            editBugTitle: "",
+            currentProjectTitle: "",
             currentBugTitle: "",
             editedBugID: null,
             editedProjectID: null,
             deleteID: null,
             currentProject: null,
-            currentProjectTitle: ""
+            currentBug: null,
+            isFixed: false
         }
     },
     getters: {},
@@ -126,47 +129,49 @@ export const useGeneralStore = defineStore('general', {
                     {
                         owner_id:  project_id,
                         title: this.createBugTitle,
+                        fixed: false
                     },
                     {
                         headers: { Authorization: 'Bearer ' + authStore.token },
                     }
                 )
                 .then((response) => {
-                    this.getExercises(project_id)
+                    this.getBugs(project_id)
                     this.createBugTitle = ''
                 })
         },
 
-        editBug() {
+        editBug(bug_id) {
             const authStore = useAuthStore()
 
             axios
                 .put(
-                    `users/${authStore.user_id}/projects/${this.editedProjectID}/bugs/${this.editedBugID}`,
+                    `users/${authStore.user_id}/projects/${this.currentProject.id}/bugs/${bug_id}`,
                     {
-                        current_title: this.currentBugTitle,
-                        title: this.createBugTitle,
+                        project_id: this.currentProject.id,
+                        title: this.editBugTitle,
+                        fixed: this.isFixed
                     },
                     {
                         headers: { Authorization: 'Bearer ' + authStore.token },
                     }
                 )
                 .then((response) => {
-                    this.getBugs(this.editedProjectID)
+                    this.getBugs(this.currentProject.id)
                     this.createBugTitle = ''
                 })
         },
-        deleteExercise() {
+        deleteBug(bug_id) {
             const authStore = useAuthStore()
             axios
                 .delete(
-                    `users/${authStore.user_id}/projects/${this.editedProjectID}/bugs/${this.editedBugID}`,
+                    `users/${authStore.user_id}/projects/${this.currentProject.id}/bugs/${bug_id}`,
                     {
                         headers: { Authorization: 'Bearer ' + authStore.token },
                     }
                 )
                 .then((response) => {
-                    this.getBugs(this.editedProjectID)
+                    this.getBugs(this.currentProject.id)
                 })
         },
     }

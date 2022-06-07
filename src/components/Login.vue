@@ -134,7 +134,7 @@ function login() {
   background-color: #D9D9D9
   height: 100vh
 .logininput
-  padding: 10px
+  padding: 5px
   color: #F76F72 !important
 
 .loginbtn

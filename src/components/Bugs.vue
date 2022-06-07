@@ -1,28 +1,79 @@
 <script setup>
 import { ref, onMounted } from "vue";
-const bugsdata = ref([
-  { id: 1, title: "fix the front signup store", checked: false },
-  { id: 2, title: "assemble the div from components", checked: false },
-  { id: 3, title: "registration sometimes fails with 404", checked: false },
-  {
-    id: 4,
-    title:
-      "user bricked pc in shopping cart cked pc in sh cked pc in shcked pc ibricked pc in shopping cart cked pc in sh cked p bricked pc in shopping cart cked pc in sh cked p bricked pc in shopping cart cked pc in sh cked p bricked pc in shopping cart cked pc in sh cked pn sh",
-    checked: false,
-  },
-  { id: 5, title: "Do stuff with the other framework", checked: false },
-  { id: 6, title: "Integration tests fail", checked: false },
-]);
-const bugs = ref(bugsdata);
+import router from "../router";
+import { useAuthStore, useGeneralStore } from "../store";
+import { useQuasar } from "quasar";
+
+const $q = useQuasar();
+const generalStore = useGeneralStore();
+const authStore = useAuthStore();
+
+let editVisible = ref(false);
+let loading = ref(false);
+let confirmDelete = ref(false);
+const addbugForm = ref(null);
+const editForm = ref(null);
 const hoveringDescription = ref(false);
 const visible = ref(false);
 const addButtonIcon = ref(true);
-const title = ref("");
 const checked = ref([]);
-let difference = ref([]);
+
+let titleRules = ref([
+  (val) => (val !== null && val !== "") || "Please enter a description",
+  (val) => val.length >= 3 || "Description must contain at least 3 characters",
+]);
+
+function addSubmit() {
+  addbugForm.value.validate();
+  generalStore.createBug(generalStore.currentProject.id);
+  generalStore.createBugTitle = "";
+}
+function editSubmit() {
+  editForm.value.validate();
+  generalStore.editBug(generalStore.currentBug.id);
+  generalStore.editBugTitle = "";
+  generalStore.createBugTitle = "";
+}
+function confirmDeleteBug(bug) {
+  confirmDelete.value = true;
+  generalStore.deleteID = bug.id;
+}
+function deleteBug() {
+  generalStore.deleteBug(generalStore.deleteID);
+}
+function editEvent(bug) {
+  generalStore.currentBug = bug;
+  generalStore.createBugTitle = bug.title;
+  generalStore.editBugTitle = bug.title;
+
+  if (editVisible.value === true) {
+    visible.value = false;
+  } else {
+    editVisible.value = !editVisible.value;
+    visible.value = false;
+  }
+}
+
+onMounted(() => {});
 </script>
+
 <template>
   <q-layout class="page">
+    <q-dialog v-model="confirmDelete" persistent>
+      <q-card>
+        <q-card-section class="row items-center justify-center">
+          <q-icon name="warning" size="xl"></q-icon>
+        </q-card-section>
+        <q-card-section
+          >Are you sure you want to delete this bug?</q-card-section
+        >
+
+        <q-card-actions align="right">
+          <q-btn flat label="Cancel" color="" v-close-popup />
+          <q-btn @click="deleteBug" label="Delete" color="red" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
     <q-page-container>
       <q-page>
         <div class="q-pa-md">
@@ -39,8 +90,12 @@ let difference = ref([]);
               </div>
               <div class="row items-center justify-center">
                 <div class="col-6">
-                  {{ bugs.length - checked.length }}
-                  {{ bugs.length - checked.length === 1 ? "bug" : "bugs" }}
+                  {{ generalStore.bugs.length - checked.length }}
+                  {{
+                    generalStore.bugs.length - checked.length === 1
+                      ? "bug"
+                      : "bugs"
+                  }}
                 </div>
 
                 <div class="col-6">
@@ -51,6 +106,7 @@ let difference = ref([]);
                     :icon="addButtonIcon ? 'add' : 'arrow_upward'"
                     @click="
                       visible = !visible;
+                      editVisible = false;
                       addButtonIcon = !addButtonIcon;
                     "
                     >{{ addButtonIcon ? "add bug" : "close" }}</q-btn
@@ -67,115 +123,183 @@ let difference = ref([]);
 
                   <q-slide-transition>
                     <div v-show="visible">
-                      <div class="addprojectinput">
-                        <q-input
-                          color="black"
-                          v-model="title"
-                          filled
-                          type="text"
-                          label="Title"
-                        />
-                      </div>
-                      <div class="addprojectinput">
-                        <q-btn
-                          class="addprojectbtn"
-                          label="Add bug"
-                          style="margin-bottom: 1em"
-                        />
-                        <q-separator spaced></q-separator>
-                      </div>
+                      <q-form
+                        ref="addbugForm"
+                        @submit.prevent.stop="addSubmit"
+                        class="q-validation-component"
+                      >
+                        <div class="addprojectinput">
+                          <q-input
+                            color="black"
+                            v-model="generalStore.createBugTitle"
+                            filled
+                            type="text"
+                            label="Bug description"
+                            :rules="titleRules"
+                          />
+                        </div>
+                        <div class="addprojectinput">
+                          <q-btn
+                            type="submit"
+                            class="addprojectbtn"
+                            label="Add bug"
+                            style="margin-bottom: 1em"
+                          />
+                          <q-separator spaced></q-separator></div
+                      ></q-form>
+                    </div>
+                  </q-slide-transition>
+                  <q-slide-transition>
+                    <div v-show="editVisible">
+                      <q-form
+                        ref="editForm"
+                        @submit.prevent.stop="editSubmit"
+                        class="q-validation-component"
+                      >
+                        <div class="addprojectinput">
+                          <div class="text-h6" style="margin-bottom: 20px">
+                            [ EDIT ] >> {{ generalStore.createBugTitle }}
+                          </div>
+                          <q-input
+                            color="black"
+                            v-model="generalStore.editBugTitle"
+                            filled
+                            type="text"
+                            label="New bug description"
+                            :rules="titleRules"
+                          />
+                        </div>
+                        <div class="addprojectinput">
+                          <q-btn
+                            @click="editVisible = !editVisible"
+                            type="submit"
+                            class="addprojectbtn"
+                            label="Edit"
+                            style="margin-bottom: 1em"
+                          />
+
+                          <q-btn
+                            @click="editVisible = !editVisible"
+                            flat
+                            class="addprojectbtn"
+                            label="Close"
+                            style="margin-bottom: 1em"
+                          /><q-separator spaced></q-separator>
+                        </div>
+                      </q-form>
                     </div>
                   </q-slide-transition>
                 </div>
                 <!--BUG DATA LOOP-->
-
-                <div
-                  v-for="bug in bugs"
-                  v-bind:key="bug"
-                  class="col-md-12 col-xs-12 cardParent"
-                >
-                  <q-slide-transition appear :duration="1000">
-                    <q-card
-                      v-if="!checked.includes(bug.title)"
-                      class="projectcard"
-                    >
-                      <q-card-section>
-                        <q-skeleton v-if="false" :animation="wave" />
-                        <div class="row items-center">
-                          <div class="bugCheckbox col-1">
-                            <div class="row justify-center">
-                              <q-checkbox
-                                class="cbox"
-                                dark
-                                size="md"
-                                v-model="checked"
-                                :val="bug.title"
-                                color="white"
-                              />
+                <transition-group name="list">
+                  <div
+                    v-for="bug in generalStore.bugs"
+                    v-bind:key="bug.id"
+                    class="col-md-12 col-xs-12"
+                  >
+                    <q-slide-transition appear :duration="1000">
+                      <q-card
+                        v-if="!checked.includes(bug.title)"
+                        class="projectcard"
+                      >
+                        <q-card-section>
+                          <q-skeleton v-if="false" :animation="wave" />
+                          <div class="row items-center">
+                            <div class="bugCheckbox col-2">
+                              <div class="row justify-center">
+                                <q-checkbox
+                                  class="cbox"
+                                  dark
+                                  size="md"
+                                  v-model="checked"
+                                  :val="bug.title"
+                                  color="white"
+                                />
+                              </div>
+                            </div>
+                            <!--<q-separator inset vertical spaced></q-separator>-->
+                            <div class="projectTitle col-9">
+                              {{ bug.title }}
                             </div>
                           </div>
-                          <q-separator inset vertical spaced></q-separator>
-                          <div class="projectTitle col-9">
-                            {{ bug.title }}
-                          </div>
-                          <q-space></q-space>
-                          <div class="col-1">
-                            <q-btn size="md" flat color="white" icon="delete"
-                              ><q-tooltip> Delete bug </q-tooltip></q-btn
-                            >
-                          </div>
-                        </div>
-                      </q-card-section>
-                    </q-card></q-slide-transition
-                  >
-                </div>
-                <div class="qa-pa-md col-12">
-                  <div class="row" style="margin-top: 3em">
-                    <div class="col">{{ checked.length }} fixed</div>
+                        </q-card-section>
+                        <q-card-actions
+                          ><q-space></q-space>
+                          <q-btn
+                            size="md"
+                            flat
+                            color="white"
+                            icon="edit"
+                            @click="editEvent(bug)"
+                          ></q-btn>
+                          <q-btn
+                            size="md"
+                            flat
+                            color="white"
+                            icon="delete"
+                            @click="confirmDeleteBug(bug)"
+                          ></q-btn
+                        ></q-card-actions> </q-card
+                    ></q-slide-transition>
                   </div>
-                  <div class="col"><q-separator spaced></q-separator></div>
-                </div>
-                <div
-                  v-for="bug in bugs"
-                  v-bind:key="bug"
-                  class="col-md-12 col-xs-12"
-                >
-                  <q-slide-transition appear :duration="1000">
-                    <q-card
-                      class="projectcard"
-                      v-if="checked.includes(bug.title)"
-                      style="background-color: #676767 !important"
-                    >
-                      <q-card-section>
-                        <q-skeleton v-if="false" :animation="wave" />
-                        <div class="row items-center">
-                          <div class="bugCheckbox col-1">
-                            <div class="row justify-center">
-                              <q-checkbox
-                                dark
-                                size="md"
-                                v-model="checked"
-                                :val="bug.title"
-                                color="black"
-                                class="cbox"
-                              />
+                  <div class="qa-pa-md col-12">
+                    <div class="row" style="margin-top: 3em">
+                      <div class="col">{{ checked.length }} fixed</div>
+                    </div>
+                    <div class="col"><q-separator spaced></q-separator></div>
+                  </div>
+                  <div
+                    v-for="bug in generalStore.bugs"
+                    v-bind:key="bug.id"
+                    class="col-md-12 col-xs-12"
+                  >
+                    <q-slide-transition appear :duration="1000">
+                      <q-card
+                        class="projectcard"
+                        v-if="checked.includes(bug.title)"
+                        style="background-color: #676767 !important"
+                      >
+                        <q-card-section>
+                          <q-skeleton v-if="false" :animation="wave" />
+                          <div class="row items-center">
+                            <div class="bugCheckbox col-2">
+                              <div class="row justify-center">
+                                <q-checkbox
+                                  dark
+                                  size="md"
+                                  v-model="checked"
+                                  :val="bug.title"
+                                  color="black"
+                                  class="cbox"
+                                />
+                              </div>
+                            </div>
+                            <!--<q-separator inset vertical spaced></q-separator>-->
+                            <div class="projectTitle col-9 checkedList">
+                              {{ bug.title }}
                             </div>
                           </div>
-                          <q-separator inset vertical spaced></q-separator>
-                          <div class="projectTitle col-9 checkedList">
-                            {{ bug.title }}
-                          </div>
-                          <q-space></q-space>
-                          <div class="col-1">
-                            <q-btn size="md" flat color="white" icon="delete"
-                              ><q-tooltip> Delete bug </q-tooltip></q-btn
-                            >
-                          </div>
-                        </div>
-                      </q-card-section>
-                    </q-card></q-slide-transition
-                  >
-                </div>
+                        </q-card-section>
+                        <q-card-actions
+                          ><q-space></q-space>
+                          <q-btn
+                            size="md"
+                            flat
+                            color="white"
+                            icon="edit"
+                            @click="editEvent(bug)"
+                          ></q-btn>
+                          <q-btn
+                            size="md"
+                            flat
+                            color="white"
+                            icon="delete"
+                            @click="confirmDeleteBug(bug)"
+                          ></q-btn
+                        ></q-card-actions> </q-card
+                    ></q-slide-transition>
+                  </div>
+                </transition-group>
               </div>
               <!--FLOATING ACTION BUTTONS-->
               <q-page-sticky position="bottom-left" :offset="[18, 18]">
@@ -209,7 +333,7 @@ let difference = ref([]);
     background-color: #DE6366//#8d8d8d//#f99a9c
     transition: all .2s ease-in-out
     &:hover
-        transform: scale(1.02)
+        transform: scale(0.99)
         background-color: #F76F72
 
 .addfab
@@ -242,7 +366,7 @@ let difference = ref([]);
     background-color: #676767
     font-family: 'Anek Malayalam', sans-serif
 .projectTitle
-    font-size: 16px
+    font-size: 1.1em
     letter-spacing: .5px
     color: white
 .checkedList
@@ -253,4 +377,13 @@ let difference = ref([]);
 .cbox:hover
     transition: all .2s ease-in-out
     transform: scale(1.2)
+
+.list-enter-active,
+.list-leave-active
+    transition: all 0.5s ease
+
+.list-enter-from,
+.list-leave-to
+    opacity: 0
+    transform: translateX(30px)
 </style>

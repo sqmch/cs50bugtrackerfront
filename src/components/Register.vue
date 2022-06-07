@@ -92,7 +92,7 @@ function createAccount() {
                 v-model="username"
                 filled
                 type="username"
-                label="username"
+                label="Username"
                 :rules="usernameRules"
                 autocomplete="on"
               />
@@ -151,7 +151,7 @@ function createAccount() {
   background-color: #D9D9D9
   height: 100vh
 .logininput
-  padding: 10px
+  padding: 5px
   color: #F76F72 !important
 .registerbtn
   width: 100%

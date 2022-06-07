@@ -10,9 +10,6 @@ const authStore = useAuthStore();
 
 let visible = ref(false);
 let editVisible = ref(false);
-const addButtonIcon = ref(true);
-let title = ref("");
-const hoveringDescription = ref(false);
 let loading = ref(false);
 let confirmDelete = ref(false);
 const loginForm = ref(null);
@@ -52,6 +49,11 @@ function editEvent(project) {
     editVisible.value = !editVisible.value;
     visible.value = false;
   }
+}
+function toBugs(project) {
+  generalStore.currentProject = project;
+  generalStore.getBugs(project.id);
+  router.push("/bugs");
 }
 onMounted(() => {
   generalStore.getProjects();
@@ -100,11 +102,10 @@ onMounted(() => {
                     style="letter-spacing: 1px"
                     class="toolbarAdd"
                     flat
-                    :icon="addButtonIcon ? 'add' : 'arrow_upward'"
+                    :icon="!visible ? 'add' : 'arrow_upward'"
                     @click="
                       visible = !visible;
                       editVisible = false;
-                      addButtonIcon = !addButtonIcon;
                       generalStore.createProjectTitle = '';
                     "
                     >add project</q-btn
@@ -138,7 +139,6 @@ onMounted(() => {
                         </div>
                         <div class="addprojectinput">
                           <q-btn
-                            @click="visible = !visible"
                             type="submit"
                             class="addprojectbtn"
                             label="Add project"
@@ -195,29 +195,33 @@ onMounted(() => {
                     v-bind:key="project.id"
                     class="col-md-3 col-xs-6"
                   >
-                    <q-card class="projectcard text-white">
-                      <q-card-section transition-show="jump-down">
-                        <div class="row items-center justify-center">
-                          <div class="projectTitle">{{ project.title }}</div>
-                        </div>
-                      </q-card-section>
+                    <q-slide-transition appear :duration="1000">
+                      <q-card class="projectcard text-white">
+                        <q-card-section transition-show="jump-down">
+                          <div
+                            class="row items-center justify-center"
+                            @click="toBugs(project)"
+                          >
+                            <div class="projectTitle">{{ project.title }}</div>
+                          </div>
+                        </q-card-section>
 
-                      <q-card-actions>
-                        <q-btn
-                          flat
-                          color="white"
-                          icon="edit"
-                          @click="editEvent(project)"
-                        ></q-btn>
-                        <q-space></q-space>
-                        <q-btn
-                          flat
-                          color="white"
-                          icon="delete"
-                          @click="confirmDeleteProject(project)"
-                        ></q-btn>
-                      </q-card-actions>
-                    </q-card>
+                        <q-card-actions>
+                          <q-btn
+                            flat
+                            color="white"
+                            icon="edit"
+                            @click="editEvent(project)"
+                          ></q-btn>
+                          <q-space></q-space>
+                          <q-btn
+                            flat
+                            color="white"
+                            icon="delete"
+                            @click="confirmDeleteProject(project)"
+                          ></q-btn>
+                        </q-card-actions> </q-card
+                    ></q-slide-transition>
                   </div>
                 </transition-group>
               </div>
@@ -288,7 +292,8 @@ onMounted(() => {
   background-color: #676767
   font-family: 'Anek Malayalam', sans-serif
 .projectTitle
-  font-size: 1.3em
+  min-height: 75px
+  font-size: 1.1em
   letter-spacing: .5px
 
 @keyframes cursor-blink
