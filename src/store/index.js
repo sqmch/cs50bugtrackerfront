@@ -107,7 +107,7 @@ export const useGeneralStore = defineStore('general', {
         },
         // BUGS
         ///////
-        getBugs(project_id) {
+         getBugs(project_id) {
             const authStore = useAuthStore()
             axios
                 .get(
@@ -118,6 +118,12 @@ export const useGeneralStore = defineStore('general', {
                 )
                 .then((response) => {
                     this.bugs = response.data
+                    this.unCheckedBugs = this.bugs.filter(
+                        (bug) => bug.fixed != true
+                    );
+                    this.checkedBugs = this.bugs.filter(
+                        (bug) => bug.fixed === true
+                    );
                 })
         },
         createBug(project_id) {
@@ -137,20 +143,55 @@ export const useGeneralStore = defineStore('general', {
                 )
                 .then((response) => {
                     this.getBugs(project_id)
-                    this.createBugTitle = ''
+                })
+        },
+        checkBug(bug) {
+            const authStore = useAuthStore()
+            axios
+                .put(
+                    `users/${authStore.user_id}/projects/${this.currentProject.id}/bugs/${bug.id}`,
+                    {
+                        project_id: this.currentProject.id,
+                        title: bug.title,
+                        fixed: true
+                    },
+                    {
+                        headers: { Authorization: 'Bearer ' + authStore.token },
+                    }
+                )
+                .then((response) => {
+                    this.getBugs(this.currentProject.id)
+                })
+        },
+        unCheckBug(bug) {
+            const authStore = useAuthStore()
+            axios
+                .put(
+                    `users/${authStore.user_id}/projects/${this.currentProject.id}/bugs/${bug.id}`,
+                    {
+                        project_id: this.currentProject.id,
+                        title: bug.title,
+                        fixed: false
+                    },
+                    {
+                        headers: { Authorization: 'Bearer ' + authStore.token },
+                    }
+                )
+                .then((response) => {
+                    this.getBugs(this.currentProject.id)
                 })
         },
 
-        editBug(bug_id) {
+        editBug(bug) {
             const authStore = useAuthStore()
 
             axios
                 .put(
-                    `users/${authStore.user_id}/projects/${this.currentProject.id}/bugs/${bug_id}`,
+                    `users/${authStore.user_id}/projects/${this.currentProject.id}/bugs/${bug.id}`,
                     {
                         project_id: this.currentProject.id,
                         title: this.editBugTitle,
-                        fixed: this.isFixed
+                        fixed: bug.fixed
                     },
                     {
                         headers: { Authorization: 'Bearer ' + authStore.token },
@@ -161,6 +202,7 @@ export const useGeneralStore = defineStore('general', {
                     this.createBugTitle = ''
                 })
         },
+
         deleteBug(bug_id) {
             const authStore = useAuthStore()
             axios
