@@ -31,7 +31,7 @@ function addSubmit() {
 }
 function editSubmit() {
   editForm.value.validate();
-  generalStore.editBug(generalStore.currentBug.id);
+  generalStore.editBug(generalStore.currentBug);
   generalStore.editBugTitle = "";
   generalStore.createBugTitle = "";
 }

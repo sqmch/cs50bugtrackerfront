@@ -104,6 +104,7 @@ onMounted(() => {
                     flat
                     :icon="!visible ? 'add' : 'arrow_upward'"
                     @click="
+                      visible = !visible;
                       editVisible = false;
                       generalStore.createProjectTitle = '';
                     "
