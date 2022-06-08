@@ -32,5 +32,5 @@ const q = useQuasar();
 
 .slide-fade-enter-from,
 .slide-fade-leave-to
-  transform: translateX(-1500px)
+  transform: translateX(-2000px)
 </style>
