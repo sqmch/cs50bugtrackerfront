@@ -29,6 +29,10 @@ export const useGeneralStore = defineStore('general', {
         return {
             projects: [],
             bugs: [],
+            unCheckedBugs: [],
+            checkedBugs: [],
+            unChecked: [],
+            checked: [],
             createProjectTitle: "",
             createBugTitle: "",
             editProjectTitle: "",
@@ -124,6 +128,12 @@ export const useGeneralStore = defineStore('general', {
                     this.checkedBugs = this.bugs.filter(
                         (bug) => bug.fixed === true
                     );
+                    this.checked = this.checkedBugs.map(bug => bug.id)
+                    this.unChecked = this.unCheckedBugs.map(bug => bug.id)
+                    console.log(this.unChecked);
+                    console.log(this.checked);
+
+
                 })
         },
         createBug(project_id) {

@@ -92,9 +92,9 @@ onMounted(() => {});
               </div>
               <div class="row items-center justify-center">
                 <div class="col-6">
-                  {{ generalStore.bugs.length - checked.length }}
+                  {{ generalStore.bugs.length - generalStore.checked.length }}
                   {{
-                    generalStore.bugs.length - checked.length === 1
+                    generalStore.bugs.length - generalStore.checked.length === 1
                       ? "bug"
                       : "bugs"
                   }}
@@ -201,7 +201,7 @@ onMounted(() => {});
                   >
                     <q-slide-transition appear :duration="1000">
                       <q-card
-                        v-if="!checked.includes(bug.title)"
+                        v-if="!generalStore.checked.includes(bug.id)"
                         class="projectcard"
                       >
                         <q-card-section>
@@ -209,11 +209,12 @@ onMounted(() => {});
                             <div class="bugCheckbox col-2">
                               <div class="row justify-center">
                                 <q-checkbox
+                                  @click="generalStore.checkBug(bug)"
                                   class="cbox"
                                   dark
                                   size="md"
-                                  v-model="checked"
-                                  :val="bug.title"
+                                  v-model="generalStore.checked"
+                                  :val="bug.id"
                                   color="white"
                                 />
                               </div>
@@ -246,7 +247,9 @@ onMounted(() => {});
                   </div>
                   <div class="qa-pa-md col-12">
                     <div class="row" style="margin-top: 3em">
-                      <div class="col">{{ checked.length }} fixed</div>
+                      <div class="col">
+                        {{ generalStore.checked.length }} fixed
+                      </div>
                     </div>
                     <div class="col"><q-separator spaced></q-separator></div>
                   </div>
@@ -258,7 +261,7 @@ onMounted(() => {});
                     <q-slide-transition appear :duration="1000">
                       <q-card
                         class="projectcard"
-                        v-if="checked.includes(bug.title)"
+                        v-if="generalStore.checked.includes(bug.id)"
                         style="background-color: #676767 !important"
                       >
                         <q-card-section>
@@ -267,10 +270,11 @@ onMounted(() => {});
                             <div class="bugCheckbox col-2">
                               <div class="row justify-center">
                                 <q-checkbox
+                                  @click="generalStore.unCheckBug(bug)"
                                   dark
                                   size="md"
-                                  v-model="checked"
-                                  :val="bug.title"
+                                  v-model="generalStore.checked"
+                                  :val="bug.id"
                                   color="black"
                                   class="cbox"
                                 />
