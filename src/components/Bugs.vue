@@ -17,6 +17,7 @@ const hoveringDescription = ref(false);
 const visible = ref(false);
 const addButtonIcon = ref(true);
 const checked = ref([]);
+let hoveringBug = ref(false);
 
 let titleRules = ref([
   (val) => (val !== null && val !== "") || "Please enter a description",
@@ -42,6 +43,7 @@ function deleteBug() {
   generalStore.deleteBug(generalStore.deleteID);
 }
 function editEvent(bug) {
+  editVisible.value = !editVisible.value;
   generalStore.currentBug = bug;
   generalStore.createBugTitle = bug.title;
   generalStore.editBugTitle = bug.title;
@@ -203,7 +205,6 @@ onMounted(() => {});
                         class="projectcard"
                       >
                         <q-card-section>
-                          <q-skeleton v-if="false" :animation="wave" />
                           <div class="row items-center">
                             <div class="bugCheckbox col-2">
                               <div class="row justify-center">
@@ -218,28 +219,29 @@ onMounted(() => {});
                               </div>
                             </div>
                             <!--<q-separator inset vertical spaced></q-separator>-->
-                            <div class="projectTitle col-9">
+                            <div class="projectTitle col-8">
                               {{ bug.title }}
                             </div>
+
+                            <q-space></q-space>
+                            <div class="col-2">
+                              <q-btn
+                                size="md"
+                                flat
+                                color="white"
+                                icon="edit"
+                                @click="editEvent(bug)"
+                              ></q-btn>
+                              <q-btn
+                                size="md"
+                                flat
+                                color="white"
+                                icon="delete"
+                                @click="confirmDeleteBug(bug)"
+                              ></q-btn>
+                            </div>
                           </div>
-                        </q-card-section>
-                        <q-card-actions
-                          ><q-space></q-space>
-                          <q-btn
-                            size="md"
-                            flat
-                            color="white"
-                            icon="edit"
-                            @click="editEvent(bug)"
-                          ></q-btn>
-                          <q-btn
-                            size="md"
-                            flat
-                            color="white"
-                            icon="delete"
-                            @click="confirmDeleteBug(bug)"
-                          ></q-btn
-                        ></q-card-actions> </q-card
+                        </q-card-section> </q-card
                     ></q-slide-transition>
                   </div>
                   <div class="qa-pa-md col-12">
@@ -275,28 +277,30 @@ onMounted(() => {});
                               </div>
                             </div>
                             <!--<q-separator inset vertical spaced></q-separator>-->
-                            <div class="projectTitle col-9 checkedList">
+                            <div class="projectTitle col-8 checkedList">
                               {{ bug.title }}
+                            </div>
+                            <q-space></q-space>
+                            <div class="col-2">
+                              <q-btn
+                                size="md"
+                                flat
+                                color="white"
+                                icon="edit"
+                                @click="editEvent(bug)"
+                              ></q-btn>
+                              <q-btn
+                                size="md"
+                                flat
+                                color="white"
+                                icon="delete"
+                                @click="confirmDeleteBug(bug)"
+                              ></q-btn>
                             </div>
                           </div>
                         </q-card-section>
-                        <q-card-actions
-                          ><q-space></q-space>
-                          <q-btn
-                            size="md"
-                            flat
-                            color="white"
-                            icon="edit"
-                            @click="editEvent(bug)"
-                          ></q-btn>
-                          <q-btn
-                            size="md"
-                            flat
-                            color="white"
-                            icon="delete"
-                            @click="confirmDeleteBug(bug)"
-                          ></q-btn
-                        ></q-card-actions> </q-card
+                        <q-slide-transition>
+                          <q-card-actions></q-card-actions> </q-slide-transition></q-card
                     ></q-slide-transition>
                   </div>
                 </transition-group>
@@ -325,65 +329,65 @@ onMounted(() => {});
 </template>
 <style lang="sass" scoped>
 .page
-    background-color: #D9D9D9
-    height: 100%
+  background-color: #D9D9D9
+  height: 100%
 
 .projectcard
-    transform: scale(0.95)
-    background-color: #DE6366//#8d8d8d//#f99a9c
-    transition: all .2s ease-in-out
-    &:hover
-        transform: scale(0.99)
-        background-color: #F76F72
+  transform: scale(0.95)
+  background-color: #DE6366//#8d8d8d//#f99a9c
+  transition: all .1s ease-in-out
+  &:hover
+    transform: scale(0.99)
+    background-color: #F76F72
 
 .addfab
-    background-color: #F76F72
-    color: white
-    height: 60px
-    width: 60px
+  background-color: #F76F72
+  color: white
+  height: 60px
+  width: 60px
 .header
 
-    color: #F76F72
-    font-family: 'Anek Malayalam', sans-serif
+  color: #F76F72
+  font-family: 'Anek Malayalam', sans-serif
 .toolbarAdd
-    width: 100%
+  width: 100%
 
 .header h4::after
-    content: ""
-    width: 10px
-    height: 2px
-    background: #F76F72
-    display: inline-block
-    animation: cursor-blink 1.2s steps(2) infinite
+  content: ""
+  width: 10px
+  height: 2px
+  background: #F76F72
+  display: inline-block
+  animation: cursor-blink 1.2s steps(2) infinite
 .addprojectinput
-    padding: 10px
-    color: #F76F72 !important
+  padding: 10px
+  color: #F76F72 !important
 .addprojectbtn
-    width: 100%
-    height: 3em
-    letter-spacing: 1px
-    color: #FFFFFF!important
-    background-color: #676767
-    font-family: 'Anek Malayalam', sans-serif
+  width: 100%
+  height: 3em
+  letter-spacing: 1px
+  color: #FFFFFF!important
+  background-color: #676767
+  font-family: 'Anek Malayalam', sans-serif
 .projectTitle
-    font-size: 1.1em
-    letter-spacing: .5px
-    color: white
+  font-size: 1em
+  letter-spacing: .5px
+  color: white
 .checkedList
-    text-decoration: line-through
+  text-decoration: line-through
 @keyframes cursor-blink
-    0%
-        opacity: 0
+  0%
+    opacity: 0
 .cbox:hover
-    transition: all .2s ease-in-out
-    transform: scale(1.2)
+  transition: all .2s ease-in-out
+  transform: scale(1.2)
 
 .list-enter-active,
 .list-leave-active
-    transition: all 0.5s ease
+  transition: all 0.5s ease
 
 .list-enter-from,
 .list-leave-to
-    opacity: 0
-    transform: translateX(30px)
+  opacity: 0
+  transform: translateX(30px)
 </style>
