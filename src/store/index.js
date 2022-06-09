@@ -7,7 +7,7 @@ export const useAuthStore = defineStore('auth', {
     state: () => {
         return {
             token: useStorage('token', null),
-            user: null,
+            user: useStorage('user', null),
             user_id: useStorage('user_id', null),
         }
     },
@@ -43,12 +43,23 @@ export const useGeneralStore = defineStore('general', {
             editedProjectID: null,
             deleteID: null,
             currentProject: null,
+            currentProjectID: useStorage('currentProjectID', null),
+            currentProjectTitle: useStorage('currentProjectTitle', null),
+
+
             currentBug: null,
             isFixed: false
         }
     },
     getters: {},
     actions: {
+        logout() {
+            const authStore = useAuthStore()
+            authStore.setToken(null)
+            authStore.setUserId(null)
+            authStore.setUserName(null)
+            router.push("/")
+        },
         // PROJECTS
         ///////////
         getProjects() {
@@ -130,10 +141,6 @@ export const useGeneralStore = defineStore('general', {
                     );
                     this.checked = this.checkedBugs.map(bug => bug.id)
                     this.unChecked = this.unCheckedBugs.map(bug => bug.id)
-                    console.log(this.unChecked);
-                    console.log(this.checked);
-
-
                 })
         },
         createBug(project_id) {

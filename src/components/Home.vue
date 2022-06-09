@@ -52,7 +52,9 @@ function editEvent(project) {
 }
 function toBugs(project) {
   generalStore.currentProject = project;
-  generalStore.getBugs(project.id);
+  generalStore.currentProjectID = project.id;
+  generalStore.currentProjectTitle = project.title;
+
   router.push("/bugs");
 }
 onMounted(() => {
@@ -228,7 +230,11 @@ onMounted(() => {
 
               <!--FLOATING ACTION BUTTONS-->
               <q-page-sticky position="bottom-left" :offset="[18, 18]">
-                <q-btn to="/" fab icon="logout" class="addfab"
+                <q-btn
+                  @click="generalStore.logout()"
+                  fab
+                  icon="logout"
+                  class="addfab"
                   ><q-tooltip> Sign out </q-tooltip></q-btn
                 >
               </q-page-sticky>

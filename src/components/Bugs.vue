@@ -32,8 +32,8 @@ function addSubmit() {
 function editSubmit() {
   editForm.value.validate();
   generalStore.editBug(generalStore.currentBug);
-  generalStore.editBugTitle = "";
-  generalStore.createBugTitle = "";
+  generalStore.editBugTitle = " ";
+  generalStore.createBugTitle = " ";
 }
 function confirmDeleteBug(bug) {
   confirmDelete.value = true;
@@ -56,7 +56,9 @@ function editEvent(bug) {
   }
 }
 
-onMounted(() => {});
+onMounted(() => {
+  generalStore.getBugs(generalStore.currentProjectID);
+});
 </script>
 
 <template>
@@ -88,7 +90,9 @@ onMounted(() => {});
                 <div>
                   <q-btn flat to="/home" icon="chevron_left" size="xl" />
                 </div>
-                <div><h4>myproject/bugs/</h4></div>
+                <div>
+                  <h4>{{ generalStore.currentProjectTitle }}/bugs/</h4>
+                </div>
               </div>
               <div class="row items-center justify-center">
                 <div class="col-6">
@@ -311,7 +315,12 @@ onMounted(() => {});
               </div>
               <!--FLOATING ACTION BUTTONS-->
               <q-page-sticky position="bottom-left" :offset="[18, 18]">
-                <q-btn to="/" fab icon="logout" class="addfab" />
+                <q-btn
+                  fab
+                  icon="logout"
+                  class="addfab"
+                  @click="generalStore.logout()"
+                />
               </q-page-sticky>
               <q-page-sticky position="bottom-right" :offset="[18, 18]">
                 <q-btn
