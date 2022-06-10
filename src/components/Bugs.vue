@@ -82,9 +82,9 @@ onMounted(() => {
       <q-page>
         <div class="q-pa-md">
           <div class="row">
-            <div class="col-md-2"></div>
+            <div class="col-md-2 col-xs-0"></div>
             <!--MAIN COLUMN-->
-            <div class="col-md-8">
+            <div class="col-md-8 col-xs-12">
               <!--HEADER ROW-->
               <div class="row header items-center justify-center">
                 <div>
@@ -397,7 +397,7 @@ onMounted(() => {
 
 .list-enter-active,
 .list-leave-active
-  transition: all 0.5s ease
+  transition: all 0.3s ease
 
 .list-enter-from,
 .list-leave-to
