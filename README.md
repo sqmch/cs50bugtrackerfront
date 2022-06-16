@@ -1,17 +1,19 @@
-# bugtrvcker - cs50x Final Project
+# bugtrvcker - CS50x Final Project
 ---
-#### Video Demo:  www.youtube.com/myvid24254
+#### Video Demo:  https://youtu.be/KENCaCt0UmU
 
 #### Description:
 
 ##### What is bugtrvcker
-bugtrvcker is a web app for tracking bugs and other issues that need tracking in a project. The user can sign up with an username and password, sign in into their account, create projects and add bugs to projects for convenient tracking. The user can create, read, update and delete projects and tracked bugs.
+bugtrvcker is a web app for tracking bugs and other issues that need tracking in a project. The user can sign up with an username and password, sign in into their account, create projects and add bugs to projects for convenient tracking. The user can create, read, update and delete projects and tracked bugs. The goals of the project were to practice creating an API for interacting with a database (CRUD functionality) and to design a decent looking modern frontend for communicating with the API, with emphasis on getting more comfortable with CSS and animations.
 
 ##### What was it made with - summary
-bugtrvcker's frontend is written using the Vue.js framework with Quasar as a component library. The backend is written in Python, using FastAPI as a more modern alternative to Flask for serving API endpoints to the frontend, as well as sqlite3 with SQLAlchemy for the database.
+bugtrvcker's frontend is written using the Vue.js framework with Quasar as a component library. The backend is written in Python, using FastAPI as an alternative to Flask for serving API endpoints to the frontend and finally sqlite3 with SQLAlchemy for the database.
 
 ##### Frontend
-I chose Vue 3 due to some previous experience with Vue as a very useful tool for modern web development. Instead of re-inventing a lot of wheels, I chose Quasar as my framework on top of Vue for easy access to organized components and styling classes, however also used CSS heavily for custom styling. Some noteworthy Vue libraries used are VueRouter for routing between pages/components, Pinia for state management, axios for HTTP requests.
+I chose Vue 3 due to some previous experience with Vue as a very useful tool for modern web development. I chose Quasar as my framework on top of Vue for easy access to organized components and styling classes, as essentially an alternative to something like bootstrap, however also used CSS heavily for custom styling.
+
+Some noteworthy Vue libraries used are VueRouter for routing between pages/components, Pinia for state management, axios for HTTP requests.
 
 Important files:
 - Login.vue - Vue component containing the login page with input fields for username and password, as well as a button for sending the login request to the backend
@@ -37,6 +39,5 @@ The data that is being passed around is kept neat and clean using the pydantic l
 The user authentication is handled by storing username and password hash pairs in the database and checking them against the user request from the login form. The password hashing and verification are done using the passlib library in auth.py. I am also using JWT authentication for sessions. When the user logs in, a token is generated with an expiration time and while the token is active, it permits the user to access the API endpoints without having to log in. Each route that needs to be protected with authentication uses the Depends module from FastAPI which checks that the user trying to access a route is authenticated.
 
 
-In conclusion, the project was both a lot of fun and a great learning experience. I have built a couple of similar "full stack" projects before, but this time around what I learned from the course allowed me to have a much greater understanding of what I had previously played around with.
+The project was a lot of fun and a great learning experience. The course allowed me to have a much greater understanding of what I had previously played around with. Thank you CS50 team.
 
-Finally, thank you CS50 team, this course is incredible, I wish I had found it much sooner.
