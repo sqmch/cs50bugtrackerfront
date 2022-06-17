@@ -9,6 +9,7 @@ import "@quasar/extras/material-icons/material-icons.css";
 import "quasar/src/css/index.sass";
 
 import router from "./router/index.js";
+import axios from "axios"
 import { createRouter, createWebHistory } from 'vue-router'
 import { createPinia } from 'pinia'
 
@@ -18,7 +19,15 @@ import Register from "./components/Register.vue";
 import Home from "./components/Home.vue";
 import Bugs from "./components/Bugs.vue";
 
-
+axios.interceptors.response.use(
+	function(response) {
+		return response;
+	},
+	function(error) {
+		router.push("/login");
+		return Promise.reject(error);
+	}
+);
 
 
 // 3. Create the router instance and pass the `routes` option
