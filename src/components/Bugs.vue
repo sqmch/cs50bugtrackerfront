@@ -249,14 +249,14 @@ onMounted(() => {
                         </q-card-section> </q-card
                     ></q-slide-transition>
                   </div>
-                  <!--<div class="qa-pa-md col-12">
+                  <div class="qa-pa-md col-12">
                     <div class="row" style="margin-top: 3em">
                       <div class="col">
                         {{ generalStore.checked.length }} fixed
                       </div>
                     </div>
                     <div class="col"><q-separator spaced></q-separator></div>
-                  </div>-->
+                  </div>
                   <div
                     v-for="bug in generalStore.bugs"
                     v-bind:key="bug.id"
